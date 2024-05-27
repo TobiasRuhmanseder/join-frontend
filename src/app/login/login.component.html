@@ -1,0 +1,17 @@
+<div class="login-container">
+  <img src="../../assets/img/join_logo.svg" class="logo" alt="Logo">
+  <div class="overlay" *ngIf="showOverlay" (animationend)="onAnimationEnd()"></div>
+  <div class="login-form">
+    <!-- Hier kommt dein Login-Formular hin -->
+    <h2>Login</h2>
+    <form>
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username">
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password">
+
+      <button type="submit">Login</button>
+    </form>
+  </div>
+</div>
