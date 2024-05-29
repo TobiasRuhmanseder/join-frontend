@@ -1,1 +1,38 @@
-<p>login-dialog works!</p>
+<div class="dialog-container login-dialog">
+  <h1>Log in</h1>
+  <div class="log-in-border"></div>
+  <form (ngSubmit)="checkInputs()" class="login-form">
+    <div class="input">
+      <div class="input-container">
+        <input type="username" placeholder="Username" class="input-field" [(ngModel)]="usernameValue"
+          (focus)="deleteRequiredFields()" name="username">
+        <span class="input-icon">
+          <img src="../../../assets/img/mail.svg" alt="Email Icon">
+        </span>
+      </div>
+      <div class="required-container">
+        @if (requiredUsername) {
+        <span class="required-text">Please enter your username!</span>
+        }
+      </div>
+    </div>
+    <div class="input">
+      <div class="input-container">
+        <input [type]="passwordFieldType" placeholder="Password" class="input-field" [(ngModel)]="passwordValue"
+          name="password" (focus)="togglePasswordIcon(true)" (focus)="deleteRequiredFields()">
+        <span class="input-icon" (click)="togglePasswordVisibility()">
+          <img [src]="passwordIcon" alt="Password Icon">
+        </span>
+      </div>
+      <div class="required-container">
+        @if (requiredPassword) {
+        <span class="required-text">Please enter your password!</span>
+        }
+      </div>
+    </div>
+    <div class="button-container">
+      <button class="btn-blue mr-35" type="submit">Log in</button>
+      <button class="btn-white">Guest Log in</button>
+    </div>
+  </form>
+</div>

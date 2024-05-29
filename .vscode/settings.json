@@ -1,5 +1,28 @@
 {
     "[html]": {
-        "editor.defaultFormatter": "Jota0222.multi-formatter"
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "[scss]": {
+        "editor.defaultFormatter": "vscode.css-language-features"
     }
 }
+
+// {
+//   "liveServer.settings.donotShowInfoMsg": true,
+//   "editor.minimap.enabled": false,
+//   "python.analysis.indexing": true,
+//   "python.analysis.autoImportCompletions": true,
+//   "[html]": {
+//       "editor.defaultFormatter": "Jota0222.multi-formatter",
+//   },
+//   "[css]": {
+//       "editor.defaultFormatter": "aeschli.vscode-css-formatter"
+//   },
+//   "[typescript]": {
+//       "editor.defaultFormatter": "Jota0222.multi-formatter"
+//   },
+//   "github.copilot.editor.enableAutoCompletions": true,
+// }

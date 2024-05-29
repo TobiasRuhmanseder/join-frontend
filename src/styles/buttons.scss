@@ -1,0 +1,48 @@
+.btn-blue {
+  outline: none;
+  border: none;
+  color: white;
+  font-size: 21px;
+  font-weight: 700;
+  padding: 15px 24px 15px 24px;
+  border-radius: 8px;
+  background-color: #2A3647;
+  cursor: pointer;
+  transition: all 225ms ease-in-out;
+
+  &:hover {
+    background-color: #29ABE2;
+    transition: all 225ms ease-in-out;
+  }
+
+  &:active {
+    background-color: #091931;
+    transition: all 225ms ease-out;
+  }
+}
+
+
+.btn-white {
+  outline: none;
+  border: 1px solid black;
+  color: black;
+  font-size: 21px;
+  font-weight: 700;
+  padding: 15px 24px 15px 24px;
+  border-radius: 8px;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 225ms ease-in-out;
+
+  &:hover {
+    color: #29ABE2;
+    border: 1px solid #29ABE2;
+    box-shadow: 0 0 0 1px #29ABE2;
+    transition: all 225ms ease-in-out;
+  }
+
+  &:active {
+    color: #091931;
+    transition: all 225ms ease-out;
+  }
+}
