@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login-dialog',
@@ -16,6 +17,9 @@ export class LoginDialogComponent {
   requiredPassword: boolean = false;
   requiredUsername: boolean = false;
 
+  constructor(private authService: AuthService) {
+
+  }
 
   togglePasswordVisibility() {
     if (this.passwordFieldType === 'password') {
@@ -42,10 +46,31 @@ export class LoginDialogComponent {
     if (this.passwordValue == '') {
       this.requiredPassword = true;
     }
+    if (this.passwordValue && this.usernameValue) return true
+    else return false
   }
 
   deleteRequiredFields() {
     this.requiredPassword = false;
     this.requiredUsername = false;
   }
+
+  loginWithUsernameAndPassword() {
+    if (this.checkInputs()) {
+      console.log(this.checkInputs());
+
+      this.authService.login(this.usernameValue, this.passwordValue).subscribe({
+        next: response => {
+          // Handle successful login
+          console.log('Login successful:', response);
+        },
+        error: error => {
+          // Handle login error
+          console.error('Login failed:', error);
+        }
+      });
+    }
+  }
 }
+
+

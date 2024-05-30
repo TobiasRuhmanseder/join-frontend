@@ -1,7 +1,7 @@
 <div class="dialog-container login-dialog">
   <h1>Log in</h1>
   <div class="log-in-border"></div>
-  <form (ngSubmit)="checkInputs()" class="login-form">
+  <form (ngSubmit)="loginWithUsernameAndPassword()" class="login-form">
     <div class="input">
       <div class="input-container">
         <input type="username" placeholder="Username" class="input-field" [(ngModel)]="usernameValue"
