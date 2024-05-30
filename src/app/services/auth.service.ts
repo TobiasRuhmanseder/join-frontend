@@ -18,8 +18,8 @@ export class AuthService {
       "username": username,
       "password": password
     }
-    //const body = JSON.stringify(loginData);
-    return this.http.post<AuthResponse>(url, body).pipe(         // later create a interface of the typ any
+
+    return this.http.post<AuthResponse>(url, body).pipe(
       map(response => {
         localStorage.setItem('token', response.token);
         return response;

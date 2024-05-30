@@ -1,6 +1,8 @@
+@import "buttons";
+
 .login-container {
   position: relative;
-  width: 100%;
+  width: 100vw;
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -43,4 +45,35 @@
     height: 121.97px;
     transform: translate(0, 0);
   }
+}
+
+.sign-up-section {
+  position: absolute;
+  right: 122px;
+  top: 67px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+
+  button {
+    font-size: 16px !important;
+  }
+
+  span {
+    margin-right: 35px;
+    font-size: 16px !important;
+  }
+}
+
+.dialog-wrapper {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: auto;
+  transition: transform 0.5s ease-in-out;
 }

@@ -1,1 +1,112 @@
-<p>sign-up-dialog works!</p>
+<div class="dialog-container login-dialog">
+  <img class="back-arrow" src="../../../assets/img/back_arrow_blue.svg" (click)="goToLogin()">
+  <h1>Sign up</h1>
+  <div class="log-in-border"></div>
+  <form (ngSubmit)="signUp()" class="login-form">
+    <div class="input">
+      <div class="input-container">
+        <input type="text" placeholder="Username" class="input-field" [(ngModel)]="usernameValue" name="username"
+          (ngModelChange)="onInputChange('username')" (blur)="onBlur('username')">
+        <span class="input-icon">
+          <img src="../../../assets/img/username.svg">
+        </span>
+      </div>
+      <div class="required-container">
+        @if (touchedUsername && !isFieldValid('username')) {
+        <span class="required-text">Invalid username! Only letters, numbers, and underscores allowed.</span>
+        }
+      </div>
+    </div>
+    <div class="input">
+      <div class="input-container">
+        <input type="text" placeholder="First name" class="input-field" [(ngModel)]="firstNameValue" name="firstName"
+          (ngModelChange)="onInputChange('firstName')" (blur)="onBlur('firstName')">
+        <span class="input-icon">
+          <img src="../../../assets/img/username.svg">
+        </span>
+      </div>
+      <div class="required-container">
+        @if (touchedFirstName && !isFieldValid('firstName')) {
+        <span class="required-text">Please enter a valid first name! No numbers allowed.</span>
+        }
+      </div>
+    </div>
+    <div class="input">
+      <div class="input-container">
+        <input type="text" placeholder="Last name" class="input-field" [(ngModel)]="lastNameValue" name="lastName"
+          (ngModelChange)="onInputChange('lastName')" (blur)="onBlur('lastName')">
+        <span class="input-icon">
+          <img src="../../../assets/img/username.svg">
+        </span>
+      </div>
+      <div class="required-container">
+        @if (touchedLastName && !isFieldValid('lastName')) {
+        <span class="required-text">Please enter a valid last name! No numbers allowed.</span>
+        }
+      </div>
+    </div>
+    <div class="input">
+      <div class="input-container">
+        <input type="email" placeholder="Email" class="input-field" [(ngModel)]="emailValue" name="email"
+          (ngModelChange)="onInputChange('email')" (blur)="onBlur('email')">
+        <span class="input-icon">
+          <img src="../../../assets/img/mail.svg">
+        </span>
+      </div>
+      <div class="required-container">
+        @if (touchedEmail && !isFieldValid('email')) {
+        <span class="required-text">Please enter your email!</span>
+        }
+      </div>
+    </div>
+    <div class="input">
+      <div class="input-container">
+        <input type="password" placeholder="Password" class="input-field" [(ngModel)]="passwordValue" name="password"
+          (ngModelChange)="onInputChange('password')" (blur)="onBlur('password')">
+        <span class="input-icon">
+          <img src="../../../assets/img/lock.svg">
+        </span>
+      </div>
+      <div class="required-container">
+        @if (touchedPassword && !isFieldValid('password')) {
+        <div class="passwort-required-container">
+          <span class="required-text">Password must be at least 8 characters long, contain upper and lower case letters,
+            a
+            number, and a special character.</span>
+        </div>
+
+        }
+      </div>
+    </div>
+    <div class="input">
+      <div class="input-container">
+        <input type="password" placeholder="Confirm password" class="input-field" [(ngModel)]="confirmPasswordValue"
+          name="confirmPassword" (ngModelChange)="onInputChange('confirmPassword')" (blur)="onBlur('confirmPassword')">
+        <span class="input-icon">
+          <img src="../../../assets/img/lock.svg">
+        </span>
+      </div>
+      <div class="required-container">
+        @if (touchedConfirmPassword && !isFieldValid('confirmPassword')) {
+        <span class="required-text">Please confirm the password!</span>
+        }
+      </div>
+    </div>
+    <div class="input">
+      <label class="privacy-policy">
+        <input type="checkbox" [(ngModel)]="acceptPrivacyPolicy" name="privacyPolicy"
+          (change)="onInputChange('privacyPolicy')">
+        I accept the &nbsp; <a href="/privacy-policy" target="_blank">Privacy policy</a>
+      </label>
+      <div class="required-container">
+        @if (touchedPrivacyPolicy && !isFieldValid('privacyPolicy')) {
+        <span class="required-text">You must accept the privacy policy!</span>
+        }
+      </div>
+    </div>
+    <div class="button-container">
+      <button class="btn-blue mr-35" type="submit" [disabled]="!isFormValid()"
+        [ngClass]="{'btn-disabled': !isFormValid()}">Sign up</button>
+    </div>
+  </form>
+</div>

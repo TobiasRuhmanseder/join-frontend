@@ -1,7 +1,14 @@
 <div class="login-container">
   <img src="../../assets/img/join_logo.svg" class="logo" alt="Logo">
   <div class="overlay" *ngIf="showOverlay" (animationend)="onAnimationEnd()"></div>
-  <div >
-    <!-- Login or sign up dialog comp here -->
-<app-login-dialog></app-login-dialog>
+  <div class="dialog-wrapper" [@slideInOut]="loginState">
+    <app-login-dialog></app-login-dialog>
+  </div>
+  <div class="dialog-wrapper" [@slideInOut]="signUpState">
+    <app-sign-up-dialog [parentComponent]="this"></app-sign-up-dialog>
+  </div>
+</div>
+<div class="sign-up-section" *ngIf="!signUp">
+  <span>Not a Join user?</span>
+  <button class="btn-blue btn-signup" (click)="toggleSignUp()">Sign up</button>
 </div>

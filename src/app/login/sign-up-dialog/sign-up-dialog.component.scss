@@ -1,0 +1,92 @@
+@import "input-styles";
+@import "buttons";
+
+.login-dialog {
+  width: 600px;
+  min-height: 750px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.back-arrow {
+  position: absolute;
+  left: 48px;
+  top: 64px;
+  cursor: pointer;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1 {
+  margin-top: 48px;
+  margin-bottom: 16px;
+}
+
+.log-in-border {
+  background-color: rgb(41, 171, 226);
+  margin-bottom: 32px;
+  min-height: 3px;
+  width: 130px;
+  border-radius: 16px;
+}
+
+.input-container {
+  padding: 12px 21px 12px 21px;
+  width: 380px;
+  height: 24px;
+}
+
+.input {
+  gap: 5px;
+}
+
+.mr-35 {
+  margin-right: 35px;
+}
+
+.button-container {
+  margin-top: 20px;
+}
+
+.btn-disabled {
+  background-color: lightgray;
+  cursor: not-allowed;
+
+  &:hover {
+    background-color: lightgray;
+  }
+}
+
+.privacy-policy {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.privacy-policy input {
+  margin-right: 10px;
+}
+
+.privacy-policy a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.privacy-policy a:hover {
+  text-decoration: underline;
+}
+
+.required-text {
+  margin-left: 0px !important;
+}
+
+.passwort-required-container {
+  margin-left: 8px;
+  max-width: 380px;
+}
