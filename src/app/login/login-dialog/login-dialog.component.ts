@@ -2,7 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
 import { Router } from '@angular/router';
 import { NotificationService } from '../../services/notification.service';
 
@@ -26,6 +26,7 @@ export class LoginDialogComponent implements OnDestroy {
 
 
   private loginSubscription: Subscription | null = null;
+  private timerSubscription: Subscription | null = null;
 
   constructor(private authService: AuthService, private router: Router, private notificationService: NotificationService) {
 
@@ -34,6 +35,9 @@ export class LoginDialogComponent implements OnDestroy {
   ngOnDestroy(): void {
     if (this.loginSubscription) {
       this.loginSubscription.unsubscribe();
+    }
+    if (this.timerSubscription) {
+      this.timerSubscription.unsubscribe();
     }
   }
 
@@ -83,9 +87,10 @@ export class LoginDialogComponent implements OnDestroy {
         next: response => {
           this.deleteInputs();
           this.notificationService.showMessage('Login was successful!');
-          setTimeout(() => {
-            this.router.navigate(['/login']);
-          }, 1500);
+          this.timerSubscription = timer(1500).subscribe(() => {
+            this.router.navigate(['/main']);
+          })
+
         },
         error: error => {
           if (error.status === 401) {

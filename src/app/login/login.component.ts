@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 import { SignUpDialogComponent } from './sign-up-dialog/sign-up-dialog.component';
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -22,10 +24,16 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
     ])
   ]
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   showOverlay = true;
   signUp = false;
 
+  constructor(private authService: AuthService, private router: Router) { }
+
+
+  ngOnInit(): void {
+    if (this.authService.isAuthenticated()) this.router.navigateByUrl('/main')
+  }
 
   onAnimationEnd() {
     this.showOverlay = false;

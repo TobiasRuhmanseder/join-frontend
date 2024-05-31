@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { NotificationService } from '../services/notification.service';
-import { Subscription } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
 
 @Component({
   selector: 'app-notification',
@@ -27,6 +27,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
   message: string | null = null;
   isError: boolean = false;
   show: boolean = false;
+  private timerSubscription!: Subscription;
   private subscription: Subscription | null = null;
 
   constructor(private notificationService: NotificationService) { }
@@ -47,6 +48,9 @@ export class NotificationComponent implements OnInit, OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+    if (this.timerSubscription) {
+      this.timerSubscription.unsubscribe();
+    }
   }
 
   get animationState() {
@@ -55,9 +59,9 @@ export class NotificationComponent implements OnInit, OnDestroy {
 
   showNotification() {
     this.show = true;
-    setTimeout(() => {
+    this.timerSubscription = timer(1500).subscribe(() => { // Duration of the ad
       this.show = false;
       this.notificationService.clearMessage();
-    }, 1500); // Dauer der Anzeige
+    });
   }
 }

@@ -1,0 +1,21 @@
+.main {
+  display: flex;
+}
+
+.sidemenu {
+  display: block;
+  width: 230px;
+  height: 100vh;
+}
+
+.header-menu {
+  display: block;
+  width: calc(100vw - 230px); // - Sidemenu
+  height: 96px;
+}
+
+.content-area {
+  display: block;
+  height: calc(100vh - 96px); // - headermenu
+  width: calc(100vw - 230px); // - Sidemenu
+}

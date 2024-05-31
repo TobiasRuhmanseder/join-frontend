@@ -1,11 +1,11 @@
 
 import { CreateUser } from './../../interface/user';
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LoginComponent } from '../login.component';
 import { UserService } from '../../services/user.service';
-import { Subscription } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
 import { NotificationService } from '../../services/notification.service';
 import { Router } from '@angular/router';
 
@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
   templateUrl: './sign-up-dialog.component.html',
   styleUrl: './sign-up-dialog.component.scss'
 })
-export class SignUpDialogComponent {
+export class SignUpDialogComponent implements OnDestroy {
   usernameValue: string = '';
   firstNameValue: string = '';
   lastNameValue: string = '';
@@ -40,11 +40,21 @@ export class SignUpDialogComponent {
 
   @Input() parentComponent!: LoginComponent;
   private createUserSubscription: Subscription | null = null;
+  private timerSubscription!: Subscription;
   errorMessage: string | null = null;
   constructor(private userService: UserService, private notificationService: NotificationService, private router: Router) {
-
-
   }
+
+  ngOnDestroy(): void {
+    if (this.createUserSubscription) {
+      this.createUserSubscription.unsubscribe();
+    }
+    if (this.timerSubscription) {
+      this.timerSubscription.unsubscribe();
+    }
+  }
+
+
   signUp() {
     if (this.isFormValid()) {
       let userData: CreateUser = {
@@ -58,31 +68,31 @@ export class SignUpDialogComponent {
     }
   }
 
-  // if (error.status === 400 && error.error.username[0])
-  // else
+
   createUser(userData: CreateUser): Subscription {
     return this.userService.signUpUser(userData).subscribe({
       next: response => {
         this.deleteInputs();
         this.notificationService.showMessage('You Signed Up successfully!');
-        setTimeout(() => {
+        this.timerSubscription = timer(1500).subscribe(() => {
           this.router.navigate(['/login']);
           window.location.reload();
-        }, 1500);
+        })
       },
-      error: error => {
-        console.log('Error response', error); // Hinzufügen dieses Logs zur Überprüfung der Struktur
-        if (error.status === 400) {
-          if (error.error.username) {
-            this.notificationService.showMessage('Username already taken!', true);
-          } else {
-            this.notificationService.showMessage('Something went wrong!', true);
-          }
-        } else {
-          this.notificationService.showMessage('Something went wrong!', true);
-        }
-      }
+      error: error => this.handleError(error)
     })
+  }
+
+  handleError(error: any) {
+    if (error.status === 400) {
+      if (error.error.username) {
+        this.notificationService.showMessage('Username already taken!', true);
+      } else {
+        this.notificationService.showMessage('Something went wrong!', true);
+      }
+    } else {
+      this.notificationService.showMessage('Something went wrong!', true);
+    }
   }
 
   deleteInputs() {
