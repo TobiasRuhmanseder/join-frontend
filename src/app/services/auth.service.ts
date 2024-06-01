@@ -3,13 +3,14 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { Observable, map } from 'rxjs';
 import { AuthResponse } from '../interface/auth-response';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
   }
 
   login(username: string, password: string): Observable<any> {
@@ -37,5 +38,6 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('token');
+    this.router.navigateByUrl('/login');
   }
 }

@@ -19,6 +19,11 @@
     background-color: #091931;
     transition: all 225ms ease-out;
   }
+
+  &:disabled {
+    cursor: not-allowed;
+    background-color: lightgray;
+  }
 }
 
 
@@ -44,5 +49,52 @@
   &:active {
     color: #091931;
     transition: all 225ms ease-out;
+  }
+}
+
+.btn-prio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  font-size: 20px;
+  width: 145px;
+  height: 56px;
+  cursor: pointer;
+  border: 1px solid #D1D1D1;
+  border-radius: 10px;
+
+  img {
+    margin-left: 5px;
+  }
+}
+
+.btn-urgent {
+  background-color: #FF3D00;
+  color: white;
+  font-weight: 700;
+
+  img {
+    filter: brightness(0) invert(1);
+  }
+}
+
+.btn-medium {
+  background-color: #FFA800;
+  color: white;
+  font-weight: 700;
+
+  img {
+    filter: brightness(0) invert(1);
+  }
+}
+
+.btn-low {
+  background-color: #7AE229;
+  color: white;
+  font-weight: 700;
+
+  img {
+    filter: brightness(0) invert(1);
   }
 }

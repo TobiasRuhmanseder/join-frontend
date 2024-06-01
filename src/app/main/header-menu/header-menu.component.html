@@ -1,3 +1,15 @@
 <div class="header-menu">
-
+  <span class="title">Kanban Project Management Tool</span>
+  <div class="circle" (click)="toggleDropdown($event)">
+    <span>TR</span>
+  </div>
+</div>
+@if (isDropdownOpen) {<div class="overlay" (click)="closeDropdown()"></div>}
+<div class="overlay" *ngIf="isDropdownOpen" (click)="closeDropdown()"></div>
+<div class="dropdown-menu" *ngIf="isDropdownOpen" (click)="$event.stopPropagation()">
+  <ul>
+    <li (click)="$event.stopPropagation()">Legal Notice</li>
+    <li (click)="$event.stopPropagation()">Privacy Policy</li>
+    <li (click)="logout($event)">Log out</li>
+  </ul>
 </div>
