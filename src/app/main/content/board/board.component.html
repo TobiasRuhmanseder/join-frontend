@@ -1,1 +1,41 @@
-<p>board works!</p>
+<div class="board">
+  <div class="header">
+    <h1>Add Task</h1>
+    <input type="search">
+  </div>
+  <div class="status-columns">
+    <div class="column" cdkDropList id="toDoList" #toDoList="cdkDropList" [cdkDropListData]="toDo"
+      [cdkDropListConnectedTo]="[inProgressList, awaitFeedbackList, doneList]" (cdkDropListDropped)="drop($event)">
+      <h2>To Do</h2>
+      @for (task of toDo; track task.id) {
+      <app-task-card  [loading]="isTaskLoading(task.id)" [task]="task" cdkDrag></app-task-card>
+      }
+
+    </div>
+
+    <div class="column" cdkDropList id="inProgressList" #inProgressList="cdkDropList" [cdkDropListData]="inProgress"
+      [cdkDropListConnectedTo]="[toDoList, awaitFeedbackList, doneList]" (cdkDropListDropped)="drop($event)">
+      <h2>In Progress</h2>
+      @for (task of inProgress; track task.id) {
+      <app-task-card [loading]="isTaskLoading(task.id)" [task]="task" cdkDrag>{{ task.title }}</app-task-card>
+      }
+    </div>
+
+    <div class="column" cdkDropList id="awaitFeedbackList" #awaitFeedbackList="cdkDropList"
+      [cdkDropListData]="awaitFeedback" [cdkDropListConnectedTo]="[toDoList, inProgressList, doneList]"
+      (cdkDropListDropped)="drop($event)">
+      <h2>Awaiting Feedback</h2>
+      @for (task of awaitFeedback; track task.id) {
+      <app-task-card [loading]="isTaskLoading(task.id)" [task]="task" cdkDrag>{{ task.title }}</app-task-card>
+      }
+    </div>
+
+    <div class="column" cdkDropList id="doneList" #doneList="cdkDropList" [cdkDropListData]="done"
+      [cdkDropListConnectedTo]="[toDoList, inProgressList, awaitFeedbackList]" (cdkDropListDropped)="drop($event)">
+      <h2>Done</h2>
+      @for (task of done; track task.id) {
+      <app-task-card [loading]="isTaskLoading(task.id)" [task]="task" cdkDrag>{{ task.title }}</app-task-card>
+      }
+    </div>
+  </div>
+</div>

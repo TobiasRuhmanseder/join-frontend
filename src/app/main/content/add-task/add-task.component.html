@@ -43,7 +43,8 @@
           <div class="dropdown-menu" *ngIf="showDropdown" (click)="$event.stopPropagation()">
             @for (user of allUsers; track user) {
             <div class="checkbox-container">
-              <input type="checkbox" [id]="'user_' + user.id" [value]="user.id" (change)="onUserChange($event)">
+              <input type="checkbox" [id]="'user_' + user.id" [value]="user.id" [(ngModel)]="user.selected"
+                (change)="onUserChange($event, user.id)">
               <label [for]="'user_' + user.id">{{user.first_name}} {{user.last_name}}</label>
             </div>
             } @empty {
@@ -73,7 +74,7 @@
         }
       </div>
       <div class="input">
-        <label>Prio</label>
+        <label>Prio<span class="required-asterisk">*</span></label>
         <div class="prio-container">
           <button type="button" class="btn-prio" [class.btn-urgent]="priority === 'urgent'"
             (click)="setPriority('urgent')">Urgent
@@ -95,7 +96,7 @@
             (change)="onCategoryChange($event)">
             <option value="" disabled selected>Select task category</option>
             @for (category of categories; track category) {
-            <option [value]="category.category">{{category.category}}</option>
+            <option [value]="category.id">{{category.category}}</option>
             }
             <option value="add-new">Add new category</option>
           </select>
@@ -121,16 +122,16 @@
       <div class="input">
         <label for="subtask">Subtasks</label>
         <div class="input-container">
-          <input type="text" id="subtask" placeholder="Add new subtask" class="input-field" [(ngModel)]="newSubtask"
-            name="subtask">
+          <input type="text" id="subtask" placeholder="Add new subtask" class="input-field"
+            [(ngModel)]="newSubtaskTitle" name="subtask">
           <span class="input-icon" (click)="addSubtask()">
             <img class="check-icon" src="../../../../assets/img/check.svg" alt="Plus icon">
           </span>
         </div>
         <ul class="subtask-list">
-          @for (subtask of subtasks; track subtask) {
+          @for (subtask of subtasks; track subtask.id) {
           <li>
-            {{ subtask }}
+            {{ subtask.title }}
             <img src="../../../../assets/img/x.svg" class="remove-subtask" (click)="removeSubtask(subtask)">
           </li>
           } @empty {

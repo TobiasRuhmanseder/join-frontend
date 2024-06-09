@@ -1,9 +1,15 @@
+import { Subtask, Task } from './../../../interface/task';
 import { User } from './../../../interface/user';
 import { CommonModule } from '@angular/common';
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { UserService } from '../../../services/user.service';
+import { TaskService } from '../../../services/task.service';
+import { Category } from '../../../interface/category';
+import { NotificationService } from '../../../services/notification.service';
+import { Router } from '@angular/router';
+
 
 
 @Component({
@@ -18,7 +24,8 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   description: string = '';
   dueDate: string = '';
   priority: string = '';
-  selectedCategory: string = '';
+  selectedCategory!: number;
+  newSubtaskTitle: string = '';
   newSubtask: string = '';
   assignedTo: number[] = [];
   minDate!: string;
@@ -26,15 +33,15 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   showNewCategoryForm: boolean = false;
   showDropdown: boolean = false;
 
-  subtasks: string[] = [];
-  categories: { category: string, color: string }[] = [
-    { category: 'Work', color: '#FF5733' },
-    { category: 'Personal', color: '#33FF57' },
-  ];
-
+  subtasks: Subtask[] = [];
+  categories: Category[] = [];
   allUsers: User[] = [];
 
   private userSubscription!: Subscription;
+  private categorySubscription!: Subscription;
+  private addCategorySubscription!: Subscription;
+  private createTaskSubscription!: Subscription;
+
 
   touchedTitle = false;
   touchedDescription = false;
@@ -43,33 +50,80 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   touchedCategory = false;
   touchedAssignedTo = false;
 
-  constructor(private userService: UserService) {
+  constructor(private router: Router, private userService: UserService, private taskService: TaskService, private notificationService: NotificationService) {
 
   }
 
   ngOnInit(): void {
     this.minDate = this.getDateToday();
     this.userSubscription = this.subAllUsers();
-  }
-
-  subAllUsers(): Subscription {
-    return this.userService.getAllUsers().subscribe({
-      next: response => {
-        console.log(response);
-
-        this.allUsers = response;
-        console.log(this.allUsers);
-
-      }
-      ,
-      error: error => console.log(error)
-    })
+    this.categorySubscription = this.subAllCategories();
   }
 
   ngOnDestroy(): void {
     if (this.userSubscription) {
       this.userSubscription.unsubscribe();
     }
+    if (this.categorySubscription) {
+      this.categorySubscription.unsubscribe();
+    }
+    if (this.addCategorySubscription) {
+      this.addCategorySubscription.unsubscribe();
+    }
+    if (this.createTaskSubscription) {
+      this.createTaskSubscription.unsubscribe();
+    }
+  }
+
+  subAllUsers(): Subscription {
+    return this.userService.getAllUsers().subscribe({
+      next: response => {
+        this.allUsers = response;
+      }
+      ,
+      error: error => console.log(error)
+    })
+  }
+
+  subAllCategories(): Subscription {
+    return this.taskService.getAllCategories().subscribe({
+      next: response => {
+        this.categories = response;
+      }
+      ,
+      error: error => console.log(error)
+    })
+  }
+
+  subAddCategories(newCategory: Category): Subscription {
+    return this.taskService.createNewCategory(newCategory).subscribe({
+      next: response => {
+        this.categories.push(response);
+        this.newCategoryName = '';
+        this.showNewCategoryForm = false;
+        this.selectedCategory = response.id;
+      },
+      error: error => {
+        console.log(error);
+        this.notificationService.showMessage('Something went wrong!')
+      }
+    });
+  }
+
+  subCreateCategory(newTask: Task) {
+    return this.taskService.createTask(newTask).subscribe({
+      next: response => {
+        console.log('Task created:', response);
+        this.resetForm();
+        this.notificationService.showMessage('Task was created successfully!');
+        this.router.navigateByUrl('/main/board');
+      },
+      error: error => {
+        console.log(error);
+        this.notificationService.showMessage('Something went wrong!')
+
+      }
+    });
   }
 
   getDateToday() {
@@ -94,24 +148,22 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     const target = event.target as HTMLSelectElement;
     if (target.value === 'add-new') {
       this.showNewCategoryForm = true;
-      this.selectedCategory = '';
+      this.selectedCategory = 0;
     } else {
       this.showNewCategoryForm = false;
+      this.selectedCategory = Number(target.value);
     }
     this.touchedCategory = true;
   }
 
   addNewCategory() {
     if (this.newCategoryName.trim() !== '') {
-      const newCategory = {
+      const newCategory: Category = {
+        id: 0, // Temporäre ID, wird durch Backend ersetzt
         category: this.newCategoryName.trim(),
         color: this.generateRandomColor()
       };
-      this.categories.push(newCategory);
-      this.saveCategories();
-      this.newCategoryName = '';
-      this.showNewCategoryForm = false;
-      this.selectedCategory = newCategory.category;
+      this.addCategorySubscription = this.subAddCategories(newCategory);
     }
   }
 
@@ -135,8 +187,9 @@ export class AddTaskComponent implements OnInit, OnDestroy {
       case 'title':
       case 'dueDate':
       case 'priority':
+        return (this[field] as string).trim() !== '';
       case 'selectedCategory':
-        return this[field].trim() !== '';
+        return this.selectedCategory !== undefined && this.selectedCategory > 0;
       case 'assignedTo':
         return this.assignedTo.length > 0;
       default:
@@ -154,22 +207,26 @@ export class AddTaskComponent implements OnInit, OnDestroy {
 
   addTask() {
     if (this.isFormValid()) {
-      console.log('Task added:', {
+      const newTask: Task = {
+        id: 0,
         title: this.title,
         description: this.description,
-        dueDate: this.dueDate,
+        users: this.assignedTo,
+        due_date: this.dueDate,
         priority: this.priority,
         category: this.selectedCategory,
+        board: 1,
         subtasks: this.subtasks,
-        assignedTo: this.assignedTo
-      });
-      this.resetForm();
+        status: 'toDo'
+      };
+      console.log(newTask);
+
+      this.createTaskSubscription = this.subCreateCategory(newTask);
     }
   }
 
-  onUserChange(event: Event) {
+  onUserChange(event: Event, userId: number) {
     const target = event.target as HTMLInputElement;
-    const userId = parseInt(target.value, 10);
     if (target.checked) {
       this.assignedTo.push(userId);
     } else {
@@ -179,14 +236,23 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   }
 
   addSubtask() {
-    if (this.newSubtask.trim() !== '') {
-      this.subtasks.push(this.newSubtask);
-      this.newSubtask = '';
+    console.log('test');
+    
+    if (this.newSubtaskTitle.trim() !== '') {
+      const newSubtask: Subtask = {
+        id: this.subtasks.length + 1, // Temporäre ID, wird durch Backend ersetzt
+        title: this.newSubtaskTitle,
+        completed: false
+      };
+      this.subtasks.push(newSubtask);
+      this.newSubtaskTitle = '';
+      console.log(this.subtasks);
+
     }
   }
 
-  removeSubtask(subtask: string) {
-    this.subtasks = this.subtasks.filter(s => s !== subtask);
+  removeSubtask(subtask: Subtask) {
+    this.subtasks = this.subtasks.filter(s => s.id !== subtask.id);
   }
 
   clearForm() {
@@ -198,7 +264,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     this.description = '';
     this.dueDate = '';
     this.priority = '';
-    this.selectedCategory = '';
+    this.selectedCategory = 0;
     this.newSubtask = '';
     this.assignedTo = [];
     this.subtasks = [];

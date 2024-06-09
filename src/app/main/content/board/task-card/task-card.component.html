@@ -1,0 +1,19 @@
+<div class="card" [ngClass]="{'loading': loading}" (click)="openDialog()">
+    <div class="category" [ngStyle]="{'background-color':'green'}">Frontend</div>
+    <div class="title">That the Title</div>
+    <span class="description">Das ist ein langer Text bla bla und das jab b und das kann es nicht sein</span>
+    <div class="subtask-container">
+        <div class="line-subtask">
+            <div class="progress-line" [ngStyle]="{'width':'33%'}"></div>
+        </div>
+        <div class="subtask-text">1/3 Subtasks</div>
+    </div>
+    <div class="footer">
+        <div class="users">
+            <div class="user-circle" [ngStyle]="{'background-color':'blue'}">TR</div>
+            <div class="user-circle" [ngStyle]="{'background-color':'orange'}">DR</div>
+            <div class="user-circle" [ngStyle]="{'background-color':'red'}">JK</div>
+        </div>
+        <img src="../../../../../assets/img/medium_logo.svg" alt="">
+    </div>
+</div>

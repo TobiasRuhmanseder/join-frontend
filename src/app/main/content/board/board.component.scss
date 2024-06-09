@@ -1,0 +1,72 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 1000px;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+h1 {
+  padding-left: 96px;
+  margin: 0;
+}
+
+.status-columns {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding-right: 25px;
+  padding-left: 25px;
+
+}
+
+.board {
+  padding-top: 50px;
+}
+
+.column {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 255px;
+  margin: 10px 0;
+
+}
+
+.column:first-child {
+  margin-left: 0;
+  /* Kein Platz links von der ersten Spalte */
+}
+
+.column:last-child {
+  margin-right: 0;
+  /* Kein Platz rechts von der letzten Spalte */
+}
+
+app-task-card {
+  cursor: move;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.card.cdk-drag-preview {
+  transform: rotate(5deg);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.card.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.card.cdk-drag-animating {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+// .example-list {
+//   min-height: 200px;
+//   max-width: 255px;
+//   background-color: #f7f7f7;
+//   border-radius: 5px;
+//   flex: 1;
+//   /* Ermöglicht, dass die Liste den verfügbaren Platz einnimmt */
+// }

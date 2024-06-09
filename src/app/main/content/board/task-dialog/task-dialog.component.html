@@ -1,0 +1,7 @@
+<div class="dialog-overlay" (click)="close()">
+    <div class="dialog-content" [@slideInOut]="slideInOut" (click)="$event.stopPropagation()">
+        <button (click)="close()">Close</button>
+        <h3>{{ task?.title }}</h3>
+        <p>{{ task?.description }}</p>
+    </div>
+</div>

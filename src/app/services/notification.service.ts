@@ -21,8 +21,6 @@ export class NotificationService {
   }
 
   get isError(): boolean {
-    console.log(this.isErrorSubject.getValue());
-
     return this.isErrorSubject.getValue();
   }
 }
