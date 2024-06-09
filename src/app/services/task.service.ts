@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin, map } from 'rxjs';
-import { GetTask, Task } from '../interface/task';
+import { GetTask, Subtask, Task } from '../interface/task';
 import { User } from '../interface/user';
 
 @Injectable({
@@ -27,6 +27,21 @@ export class TaskService {
   createTask(taskData: Task): Observable<Task> {
     const url = environment.baseUrl + "/api/tasks/";
     return this.http.post<Task>(url, taskData);
+  }
+
+  getOneTask(taskId: number): Observable<Task> {
+    const url = environment.baseUrl + `/api/tasks/${taskId}/`;
+    return this.http.get<Task>(url)
+  }
+
+  deleteTask(taskId: number): Observable<Task> {
+    const url = environment.baseUrl + `/api/tasks/${taskId}/`;
+    return this.http.delete<Task>(url)
+  }
+
+  updateTask(updatedTask: Task): Observable<Task> {
+    const url = environment.baseUrl + `/api/tasks/${updatedTask.id}/`;
+    return this.http.put<Task>(url, updatedTask)
   }
 
   getTaskWithCategoryAndUsers(): Observable<GetTask[]> {
@@ -53,9 +68,12 @@ export class TaskService {
 
   updateTaskStatus(taskId: number, status: string): Observable<GetTask> {
     const url = environment.baseUrl + `/api/tasks/${taskId}/`;
-    console.log(url);
-    console.log(status);
     return this.http.patch<GetTask>(url, { "status": status })
+  }
+
+  updateSubtasks(taskId: number, subtasks: Subtask[]): Observable<GetTask> {
+    const url = environment.baseUrl + `/api/tasks/${taskId}/`;
+    return this.http.patch<GetTask>(url, { "subtasks": subtasks });
   }
 }
 

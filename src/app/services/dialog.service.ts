@@ -1,5 +1,6 @@
 import { Injectable, ComponentRef, ViewContainerRef, EnvironmentInjector } from '@angular/core';
 import { TaskDialogComponent } from '../main/content/board/task-dialog/task-dialog.component';
+import { take, timer } from 'rxjs';
 
 
 
@@ -13,18 +14,12 @@ export class DialogService {
   constructor(private environmentInjector: EnvironmentInjector) { }
 
   openDialog(viewContainerRef: ViewContainerRef, taskData: any) {
-    if (this.dialogRef) {
-      return;
-    }
-
+    if (this.dialogRef) return;
     this.dialogRef = viewContainerRef.createComponent(TaskDialogComponent, {
       environmentInjector: this.environmentInjector
     });
-
     this.dialogRef.instance.task = taskData;
-
     document.body.appendChild(this.dialogRef.location.nativeElement);
-
     this.dialogRef.instance.closeDialog = () => {
       this.closeDialog();
     };
@@ -33,13 +28,15 @@ export class DialogService {
   closeDialog() {
     if (this.dialogRef) {
       this.dialogRef.instance.slideInOut = 'out';
-      setTimeout(() => {
+      timer(10).pipe(
+        take(1)
+      ).subscribe(() => {
         if (this.dialogRef) {
           document.body.removeChild(this.dialogRef.location.nativeElement);
           this.dialogRef.destroy();
           this.dialogRef = null;
         }
-      }, 0);
+      });
     }
   }
 }

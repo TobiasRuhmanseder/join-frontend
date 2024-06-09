@@ -1,11 +1,16 @@
-import { Component, HostBinding, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { take, timer } from 'rxjs';
+import { GetTask, Subtask } from '../../../../interface/task';
+import { CommonModule } from '@angular/common';
+import { TaskService } from '../../../../services/task.service';
+import { NotificationService } from '../../../../services/notification.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-task-dialog',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './task-dialog.component.html',
   styleUrl: './task-dialog.component.scss',
   animations: [
@@ -18,11 +23,13 @@ import { take, timer } from 'rxjs';
   ]
 })
 export class TaskDialogComponent implements OnInit {
-  @Input() task: any;
+  @Input() task!: GetTask;
   public slideInOut = 'out';
 
+  constructor(private router: Router, private taskService: TaskService, private notificationService: NotificationService) { }
+
   ngOnInit() {
-    timer(0).pipe(
+    timer(10).pipe(
       take(1)
     ).subscribe(() => {
       this.slideInOut = 'in';
@@ -38,6 +45,60 @@ export class TaskDialogComponent implements OnInit {
     ).subscribe(() => {
       if (this.closeDialog) {
         this.closeDialog();
+      }
+    });
+  }
+
+  deleteTask() {
+    this.taskService.deleteTask(this.task.id).pipe(take(1)).subscribe({
+      next: deletetTask => {
+        this.notificationService.showMessage('delete successfully!', true);
+        this.close();
+      },
+      error: err => {
+        this.notificationService.showMessage('Something went wrong!', true);
+      }
+    });
+  }
+
+  editTask() {
+    this.close();
+    this.router.navigate(['main/edit_task', this.task.id]);
+  }
+
+
+  getPathPrio(prio: string) {
+    switch (prio) {
+      case 'urgent':
+        return "../../../../../assets/img/urgent_logo.svg"
+      case 'medium':
+        return "../../../../../assets/img/medium_logo.svg"
+      case 'low':
+        return "../../../../../assets/img/low_logo.svg"
+      default:
+        return ""
+    }
+  }
+
+  getInitials(user: any): string {
+    const firstNameInitial = user.first_name ? user.first_name.charAt(0).toUpperCase() : '';
+    const lastNameInitial = user.last_name ? user.last_name.charAt(0).toUpperCase() : '';
+    return firstNameInitial + lastNameInitial;
+  }
+
+  toggleSubtask(subtask: Subtask) {
+    subtask.completed = !subtask.completed; // Toggle the completed status
+    this.updateSubtasksOnBackend();
+  }
+
+  updateSubtasksOnBackend() {
+    this.taskService.updateSubtasks(this.task.id, this.task.subtasks).pipe(take(1)).subscribe({
+      next: updatedTask => {
+        this.task.subtasks = updatedTask.subtasks;
+      },
+      error: err => {
+        this.notificationService.showMessage('Something went wrong!', true);
+        this.close();
       }
     });
   }

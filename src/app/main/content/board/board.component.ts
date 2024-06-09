@@ -1,29 +1,34 @@
-import { GetTask, Task } from './../../../interface/task';
+import { GetTask } from './../../../interface/task';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { CommonModule, getLocaleFirstDayOfWeek } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { TaskCardComponent } from './task-card/task-card.component';
 import { TaskService } from '../../../services/task.service';
-import { Subscription, map, take } from 'rxjs';
+import { Observable, Subscription, debounceTime, distinctUntilChanged, map, of, startWith, switchMap, take } from 'rxjs';
 import { NotificationService } from '../../../services/notification.service';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 
 
 @Component({
   selector: 'app-board',
   standalone: true,
-  imports: [DragDropModule, CommonModule, TaskCardComponent],
+  imports: [DragDropModule, CommonModule, TaskCardComponent, ReactiveFormsModule],
   templateUrl: './board.component.html',
   styleUrl: './board.component.scss'
 })
 export class BoardComponent implements OnInit, OnDestroy {
   private getTaskSubscription!: Subscription;
+  private searchingSubscription!: Subscription;
   tasks: GetTask[] = [];
+  filteredTasks: GetTask[] = [];
   toDo: GetTask[] = [];
   inProgress: GetTask[] = [];
   awaitFeedback: GetTask[] = [];
   done: GetTask[] = [];
   loadingTaskIds: number[] = []; // Liste der IDs der Tasks, die gerade geladen werden
+  searchControl = new FormControl('');
+
 
   constructor(private taskService: TaskService, private notificationService: NotificationService) {
 
@@ -31,30 +36,58 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getTaskSubscription = this.subGetTasks();
+    this.searchingSubscription = this.subSearching();
   }
 
   ngOnDestroy(): void {
     if (this.getTaskSubscription) {
       this.getTaskSubscription.unsubscribe();
     }
+    if (this.searchingSubscription) {
+      this.searchingSubscription.unsubscribe();
+    }
   }
 
-  subGetTasks() {
+  subSearching(): Subscription {
+    return this.searchControl.valueChanges.pipe(
+      startWith(''),
+      debounceTime(300),
+      distinctUntilChanged(),
+      map(value => value?.trim() ?? ''),
+      switchMap(searchTerm => this.filterTasks(searchTerm))
+    ).subscribe(filtered => this.updateFilteredTasks(filtered));
+  }
+
+  filterTasks(searchTerm: string): Observable<GetTask[]> {
+    if (searchTerm.length < 2) {
+      return of(this.tasks);
+    }
+    const filtered = this.tasks.filter(task =>
+      task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      task.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      task.category.category.toString().toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    return of(filtered);
+  }
+
+  subGetTasks(): Subscription {
     return this.taskService.getTaskWithCategoryAndUsers().pipe(map((tasks: GetTask[]) => {
       this.tasks = tasks;
-      console.log(tasks);
+      this.filteredTasks = tasks;
+      this.updateTaskLists();
+    })).subscribe(() => { });
+  }
 
-      this.toDo = tasks.filter((task: GetTask) => task.status === 'todo');
-      this.inProgress = tasks.filter((task: GetTask) => task.status === 'inprogress');
-      this.awaitFeedback = tasks.filter((task: GetTask) => task.status === 'awaitfeedback');
-      this.done = tasks.filter((task: GetTask) => task.status === 'done');
-    })).subscribe(() => {
-      console.log(this.toDo);
-      console.log(this.inProgress);
-      console.log(this.awaitFeedback);
-      console.log(this.done);
+  updateTaskLists(): void {
+    this.toDo = this.filteredTasks.filter(task => task.status === 'todo');
+    this.inProgress = this.filteredTasks.filter(task => task.status === 'inprogress');
+    this.awaitFeedback = this.filteredTasks.filter(task => task.status === 'awaitfeedback');
+    this.done = this.filteredTasks.filter(task => task.status === 'done');
+  }
 
-    });
+  updateFilteredTasks(filtered: GetTask[]): void {
+    this.filteredTasks = filtered;
+    this.updateTaskLists();
   }
 
   drop(event: CdkDragDrop<GetTask[]>) {

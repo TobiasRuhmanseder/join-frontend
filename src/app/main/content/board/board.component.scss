@@ -1,8 +1,10 @@
+@import "input-styles";
+
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 1000px;
+  width: calc(100% - 100px);
   margin-top: 20px;
   margin-bottom: 40px;
 }
@@ -10,6 +12,10 @@
 h1 {
   padding-left: 96px;
   margin: 0;
+}
+
+.input-field {
+  width: 350px;
 }
 
 .status-columns {
@@ -62,11 +68,15 @@ app-task-card {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-// .example-list {
-//   min-height: 200px;
-//   max-width: 255px;
-//   background-color: #f7f7f7;
-//   border-radius: 5px;
-//   flex: 1;
-//   /* Ermöglicht, dass die Liste den verfügbaren Platz einnimmt */
-// }
+.emty-task {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  height: 40px;
+  background-color: rgba(0, 0, 0, 0.03);
+  border: 1px dashed grey;
+  border-radius: 12px;
+
+}

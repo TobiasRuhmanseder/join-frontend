@@ -79,15 +79,17 @@
     display: flex;
 }
 
-.user-circle {
+.user-border {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 32px;
     height: 32px;
-    border: 1px solid white;
-    border-radius: 16px;
-    color: white;
+    border: 3px solid #29ABE2;
+    outline: 2px solid white;
+    outline-offset: -1px;
+    background-color: white;
+    border-radius: 14px;
     font-size: 12px;
     margin-right: -7px;
 }

@@ -1,7 +1,55 @@
 <div class="dialog-overlay" (click)="close()">
-    <div class="dialog-content" [@slideInOut]="slideInOut" (click)="$event.stopPropagation()">
-        <button (click)="close()">Close</button>
-        <h3>{{ task?.title }}</h3>
-        <p>{{ task?.description }}</p>
+    <div class="dialog-container dialog-content" [@slideInOut]="slideInOut" (click)="$event.stopPropagation()">
+        <div class="task-header">
+            <span class="task-type" [ngStyle]="{'background-color': task.category.color}">{{ task.category.category
+                }}</span>
+            <button class="close-button" (click)="close()">×</button>
+        </div>
+        <div class="task-title">{{ task.title }}</div>
+        <div class="task-description">{{ task.description }}</div>
+
+        <div class="task-details">
+            <div class="task-detail-item">
+                <span class="task-detail-label">Due date:</span>
+                <span class="task-detail-value">{{ task.due_date | date: 'dd.MM.yyyy' }}</span>
+            </div>
+            <div class="task-detail-item">
+                <span class="task-detail-label">Priority:</span>
+                <span class="task-detail-value">{{ task.priority | titlecase }}</span>
+                <img [src]="getPathPrio(task.priority)" alt="">
+            </div>
+        </div>
+
+        <div class="task-assigned">
+            <span class="task-detail-label">Assigned To:</span>
+            <div class="assigned-users">
+                @for (user of task.users; track user) {
+                <div class="assigned-user">
+                    <div class="user-initials">{{ getInitials(user) }}</div>
+                    <div class="user-name">{{ user.first_name }} {{ user.last_name }}</div>
+                </div>
+                }
+            </div>
+        </div>
+
+        <div class="task-subtasks">
+            <div class="subtasks-title">Subtasks</div>
+            @for (subtask of task.subtasks; track subtask) {
+            <div class="subtask">
+                <input type="checkbox" [checked]="subtask.completed" (change)="toggleSubtask(subtask)" />
+                <span class="subtask-name">{{ subtask.title }}</span>
+            </div>
+            }
+        </div>
+        <div class="task-actions" (click)="deleteTask()">
+            <div class="delete-btn">
+                <img src="../../../../../assets/img/delete.svg" alt="">
+                <span> Delete </span>
+            </div>
+            <div class="edit-btn" (click)="editTask()">
+                <img src="../../../../../assets/img/edit.svg" alt="">
+                <span> Edit </span>
+            </div>
+        </div>
     </div>
 </div>

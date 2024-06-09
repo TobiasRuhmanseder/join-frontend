@@ -1,0 +1,147 @@
+<div class="add-task-dialog">
+    <div class="header">
+        <h1>Edit Task</h1>
+        <button class="btn-blue" type="button" [disabled]="!isFormValid()" [ngClass]="{'btn-disabled': !isFormValid()}"
+            (click)="updateTask()">
+            <span class="create-task-text">Update Task</span>
+            <img src="../../../../assets/img/check.svg" alt="">
+        </button>
+    </div>
+    <div class="task-form">
+        <div class="left-column">
+            <div class="input">
+                <label class="label" for="title">Title<span class="required-asterisk">*</span></label>
+                <div class="input-container">
+                    <input type="text" id="title" placeholder="Enter a title" class="input-field" [(ngModel)]="title"
+                        name="title" (ngModelChange)="onInputChange('title')" (blur)="onBlur('title')">
+                </div>
+                @if (touchedTitle && !isFieldValid('title')) {
+                <div class="required-container">
+                    <span class="required-text">Please enter a title!</span>
+                </div>
+                }
+            </div>
+            <div class="input">
+                <label for="description">Description</label>
+                <div class="input-container">
+                    <textarea id="description" placeholder="Enter a Description" class="input-field"
+                        [(ngModel)]="description" name="description" (ngModelChange)="onInputChange('description')"
+                        (blur)="onBlur('description')"></textarea>
+                </div>
+            </div>
+            <div class="input">
+                <label for="assignedTo">Assigned to<span class="required-asterisk">*</span></label>
+                <div class="input-container dropdown-header" (click)="toggleDropdown($event)">
+                    <div class="selected-users" [ngClass]="{'placeholder': !assignedTo.length}">
+                        {{ assignedTo.length ? getSelectedUsers() : 'choose users' }}
+                    </div>
+                    <span class="dropdown-arrow">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </span>
+                    <div class="dropdown-menu" *ngIf="showDropdown" (click)="$event.stopPropagation()">
+                        @for (user of allUsers; track user) {
+                        <div class="checkbox-container">
+                            <input type="checkbox" [id]="'user_' + user.id" [checked]="assignedTo.includes(user.id)"
+                                [(ngModel)]="user.selected" (change)="onUserChange($event, user.id)">
+                            <label [for]="'user_' + user.id">{{user.first_name}} {{user.last_name}}</label>
+                        </div>
+                        } @empty {
+                        <div>No users available</div>
+                        }
+                    </div>
+                </div>
+                @if (touchedAssignedTo && !isFieldValid('assignedTo')) {
+                <div class="required-container">
+                    <span class="required-text">Please select at least one user!</span>
+                </div>
+                }
+            </div>
+        </div>
+        <div class="vertical-divider"></div>
+        <div class="right-column">
+            <div class="input">
+                <label for="dueDate">Due date<span class="required-asterisk">*</span></label>
+                <div class="input-container">
+                    <input type="date" id="dueDate" placeholder="dd/mm/yyyy" class="input-field" [(ngModel)]="dueDate"
+                        name="dueDate" (ngModelChange)="onInputChange('dueDate')" (blur)="onBlur('dueDate')"
+                        [min]="minDate">
+                </div>
+                @if (touchedDueDate && !isFieldValid('dueDate')) {
+                <div class="required-container">
+                    <span class="required-text">Please enter a due date!</span>
+                </div>
+                }
+            </div>
+            <div class="input">
+                <label>Prio<span class="required-asterisk">*</span></label>
+                <div class="prio-container">
+                    <button type="button" class="btn-prio" [class.btn-urgent]="priority === 'urgent'"
+                        (click)="setPriority('urgent')">Urgent
+                        <img src="../../../../assets/img/urgent_logo.svg" alt="">
+                    </button>
+                    <button type="button" class="btn-prio" [class.btn-medium]="priority === 'medium'"
+                        (click)="setPriority('medium')">Medium
+                        <img src="../../../../assets/img/medium_logo.svg" alt="">
+                    </button>
+                    <button type="button" class="btn-prio" [class.btn-low]="priority === 'low'"
+                        (click)="setPriority('low')">Low
+                        <img src="../../../../assets/img/low_logo.svg" alt="">
+                    </button>
+                </div>
+            </div>
+            <div class="input">
+                <label for="category">Category<span class="required-asterisk">*</span></label>
+                <div class="input-container">
+                    <select id="category" class="input-field" [(ngModel)]="selectedCategory" name="category"
+                        (change)="onCategoryChange($event)">
+                        <option value="" disabled selected>Select task category</option>
+                        @for (category of categories; track category) {
+                        <option [value]="category.id">{{category.category}}</option>
+                        }
+                        <option value="add-new">Add new category</option>
+                    </select>
+                </div>
+                @if (touchedCategory && !isFieldValid('category')) {
+                <div class="required-container">
+                    <span class="required-text">Please select a category!</span>
+                </div>
+                }
+            </div>
+            @if (showNewCategoryForm) {
+            <div class="input">
+                <label for="newCategoryName">New category</label>
+                <div class="input-container">
+                    <input type="text" id="newCategoryName" placeholder="New category name" class="input-field"
+                        [(ngModel)]="newCategoryName" name="newCategoryName" />
+                    <span class="input-icon" (click)="addNewCategory()">
+                        <img class="check-icon" src="../../../../assets/img/check.svg" alt="Check icon">
+                    </span>
+                </div>
+            </div>
+            }
+            <div class="input">
+                <label for="subtask">Subtasks</label>
+                <div class="input-container">
+                    <input type="text" id="subtask" placeholder="Add new subtask" class="input-field"
+                        [(ngModel)]="newSubtaskTitle" name="subtask">
+                    <span class="input-icon" (click)="addSubtask()">
+                        <img class="check-icon" src="../../../../assets/img/check.svg" alt="Plus icon">
+                    </span>
+                </div>
+                <ul class="subtask-list">
+                    @for (subtask of subtasks; track subtask.id) {
+                    <li>
+                        {{ subtask.title }}
+                        <img src="../../../../assets/img/x.svg" class="remove-subtask" (click)="removeSubtask(subtask)">
+                    </li>
+                    } @empty {
+                    <li>No subtasks added</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

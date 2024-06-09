@@ -102,6 +102,12 @@ export class LoginDialogComponent implements OnDestroy {
       });
     }
   }
+
+  loginWithGuest() {
+    this.usernameValue = 'guest'
+    this.passwordValue = '12345GUEST'
+    this.loginWithUsernameAndPassword();
+  }
 }
 
 
