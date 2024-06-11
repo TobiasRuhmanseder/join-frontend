@@ -18,13 +18,23 @@
             }
         </div>
         }
+    </div>
 
-    </div>
-    @if (selectedUser) {
     <div class="user-details">
-        <h2>{{ selectedUser.first_name }} {{ selectedUser.last_name }}</h2>
-        <p>Username: {{ selectedUser.username }}</p>
-        <p>Email: {{ selectedUser.email }}</p>
+        <div class="details-headline">
+            <h1>Members</h1>
+            <div class="border-line"></div>
+            <span>Better with a team</span>
+        </div>
+        @if (selectedUser) {
+        <div class="name-details">
+            <div class="user-border-big"> {{ getInitials(selectedUser) }}</div>
+            <span>{{ selectedUser.first_name }} {{ selectedUser.last_name }}</span>
+        </div>
+        <p><b>Username:</b></p>
+        <p>{{ selectedUser.username }}</p>
+        <p><b>Email:</b></p>
+        <a [href]="'mailto:' + selectedUser.email">{{ selectedUser.email }}</a>
+        }
     </div>
-    }
 </div>

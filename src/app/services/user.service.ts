@@ -27,5 +27,10 @@ export class UserService {
     return this.http.get<User[]>(url)
   }
 
+  getCurrentUser(): Observable<User[]> {
+    const url = environment.baseUrl + "/api/current_user/";
+    return this.http.get<User[]>(url)
+  }
+
 
 }

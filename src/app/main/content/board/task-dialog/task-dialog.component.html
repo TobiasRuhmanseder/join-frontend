@@ -32,6 +32,7 @@
             </div>
         </div>
 
+        @if (task.subtasks.length > 0) {
         <div class="task-subtasks">
             <div class="subtasks-title">Subtasks</div>
             @for (subtask of task.subtasks; track subtask) {
@@ -41,6 +42,7 @@
             </div>
             }
         </div>
+        }
         <div class="task-actions" (click)="deleteTask()">
             <div class="delete-btn">
                 <img src="../../../../../assets/img/delete.svg" alt="">
