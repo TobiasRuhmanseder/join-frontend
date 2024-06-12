@@ -17,7 +17,7 @@
                     </div>
 
                     <div class="column">
-                        <span class="ammount">1</span>
+                        <span class="ammount">{{ toDoCount }}</span>
                         <span>To-do</span>
                     </div>
                 </div>
@@ -28,9 +28,8 @@
                             <img src="../../../../assets/img/summary_hook.svg" alt="">
                         </div>
                     </div>
-
                     <div class="column">
-                        <span class="ammount">1</span>
+                        <span class="ammount">{{ doneCount }}</span>
                         <span>Done</span>
                     </div>
                 </div>
@@ -40,12 +39,16 @@
                 <div (click)="navigateToBoard()" class="box box-size-second-row">
                     <img src="../../../../assets/img/summary_urgent.svg" alt="">
                     <div class="column">
-                        <span class="ammount">1</span>
-                        <span>Done</span>
+                        <span class="ammount">{{ urgentCount }}</span>
+                        <span>Urgent</span>
                     </div>
                     <div class="border-urgent"></div>
                     <div class="upcoming-urgent">
-                        <span>October 16, 2022</span>
+                        @if (nextUrgentTaskDueDate != '') {
+                        <span>{{ nextUrgentTaskDueDate }}</span>
+                        }@else{
+                        <span>no urgency</span>
+                        }
                         <span>Upcoming Deadline</span>
                     </div>
                 </div>
@@ -54,19 +57,19 @@
             <div class="third-row">
                 <div (click)="navigateToBoard()" class="box box-size-third-row">
                     <div class="column">
-                        <span class="ammount">5</span>
+                        <span class="ammount">{{ tasksCount }}</span>
                         <span>Tasks in <br>Board</span>
                     </div>
                 </div>
                 <div (click)="navigateToBoard()" class="box box-size-third-row">
                     <div class="column">
-                        <span class="ammount">3</span>
+                        <span class="ammount">{{ inProgressCount }}</span>
                         <span>Tasks in <br>Progress</span>
                     </div>
                 </div>
                 <div (click)="navigateToBoard()" class="box box-size-third-row">
                     <div class="column">
-                        <span class="ammount">2</span>
+                        <span class="ammount">{{ awaitFeedbackCount }}</span>
                         <span>Awaiting<br>Feedback</span>
                     </div>
                 </div>
@@ -74,7 +77,7 @@
         </div>
         <div class="greeting">
             <span>Good morning,</span>
-            <span>Tobias Ruhmanseder</span>
+            <span>{{ currentUser?.first_name}} {{ currentUser?.last_name}}</span>
 
         </div>
     </div>

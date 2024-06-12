@@ -8,13 +8,16 @@ import { UsersComponent } from './main/content/users/users.component';
 import { PrivacyPolicyComponent } from './main/content/privacy-policy/privacy-policy.component';
 import { LegalNoticeComponent } from './main/content/legal-notice/legal-notice.component';
 import { EditTaskComponent } from './main/content/edit-task/edit-task.component';
+import { CurrentUserResolver } from './resolvers/current-user.resolver';
+import { PrivacyPolicySignupComponent } from './login/privacy-policy-signup/privacy-policy-signup.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
+  { path: 'privacy_policy', component: PrivacyPolicySignupComponent },
   { path: 'main', redirectTo: '/main/summary', pathMatch: 'full' },
   { path: '', redirectTo: '/main/summary', pathMatch: 'full' },
   {
-    path: 'main', component: MainComponent, children: [
+    path: 'main', component: MainComponent, resolve: { CurrentUserResolver }, children: [
       { path: 'summary', component: SummaryComponent },
       { path: 'addtask', component: AddTaskComponent },
       { path: 'board', component: BoardComponent },

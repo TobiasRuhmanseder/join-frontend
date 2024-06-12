@@ -207,4 +207,8 @@ export class SignUpDialogComponent implements OnDestroy {
     this.parentComponent.toggleSignUp();
   }
 
+  navigateToPrivacyPolicy() {
+    this.router.navigateByUrl('privacy_policy');
+  }
+
 }

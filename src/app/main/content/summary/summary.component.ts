@@ -2,6 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../../../services/user.service';
 import { TaskService } from '../../../services/task.service';
+import { CurrentUserService } from '../../../services/current-user.service';
+import { take } from 'rxjs';
+import { User } from '../../../interface/user';
+import { GetTask } from '../../../interface/task';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-summary',
@@ -11,20 +16,57 @@ import { TaskService } from '../../../services/task.service';
   styleUrl: './summary.component.scss'
 })
 export class SummaryComponent implements OnInit {
-
-  constructor(private router: Router, private userService: UserService, private taskService: TaskService) { }
+  currentUser: User | null = null;
+  toDoCount: number = 0;
+  inProgressCount: number = 0;
+  awaitFeedbackCount: number = 0;
+  doneCount: number = 0;
+  urgentCount: number = 0;
+  tasksCount: number = 0;
+  nextUrgentTaskDueDate: string = '';
+  constructor(private router: Router, private currentUserService: CurrentUserService, private taskService: TaskService) { }
 
 
   ngOnInit(): void {
-    this.subUser();
+    this.subCurrentUser();
+    this.subTasks();
   }
 
-  subUser() {
-    this.userService.getCurrentUser().subscribe(currentUser => {
-      console.log(currentUser);
-
+  subCurrentUser() {
+    this.currentUserService.currentUser$.pipe(take(1)).subscribe(currentUser => {
+      this.currentUser = currentUser;
     }
     )
+  }
+
+  subTasks() {
+    this.taskService.getTaskWithCategoryAndUsers().pipe(take(1)).subscribe(tasks => {
+      this.toDoCount = tasks.filter(task => task.status === 'todo').length;
+      this.inProgressCount = tasks.filter(task => task.status === 'inprogress').length;
+      this.awaitFeedbackCount = tasks.filter(task => task.status === 'awaitfeedback').length;
+      this.doneCount = tasks.filter(task => task.status === 'done').length;
+      this.urgentCount = tasks.filter(task => task.priority === 'urgent').length;
+      this.tasksCount = tasks.length;
+      this.nextUrgentTaskDueDate = this.getNextUrgentTaskDueDate(tasks);
+    }
+    )
+  }
+
+  getNextUrgentTaskDueDate(tasks: GetTask[]): string {
+    const urgentTasks = tasks
+      .filter(task => task.priority === 'urgent' && new Date(task.due_date) > new Date())
+      .sort((a, b) => new Date(a.due_date).getTime() - new Date(b.due_date).getTime());
+
+    if (urgentTasks.length > 0) {
+      return this.formatDate(urgentTasks[0].due_date);
+    } else {
+      return '';
+    }
+  }
+
+  formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    return formatDate(date, 'MMMM dd, yyyy', 'en-US');
   }
 
   navigateToBoard() {
