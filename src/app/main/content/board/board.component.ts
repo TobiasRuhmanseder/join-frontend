@@ -100,6 +100,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       const container = event.container;
       const updatedTask = previousContainer.data[previousIndex];
       const newStatus = this.getStatusFromContainerId(container.id);
+      
       transferArrayItem(previousContainer.data, container.data, previousIndex, currentIndex);
       this.markTaskAsLoading(updatedTask.id); // mark the task - is loading
       this.updateStatusBackend(updatedTask.id, newStatus, previousContainer, container.data, previousIndex, currentIndex, updatedTask);
