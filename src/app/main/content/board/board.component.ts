@@ -7,6 +7,7 @@ import { TaskService } from '../../../services/task.service';
 import { Observable, Subscription, debounceTime, distinctUntilChanged, map, of, startWith, switchMap, take } from 'rxjs';
 import { NotificationService } from '../../../services/notification.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { TaskEventService } from '../../../services/task-event.service';
 
 
 
@@ -18,8 +19,8 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
   styleUrl: './board.component.scss'
 })
 export class BoardComponent implements OnInit, OnDestroy {
-  private getTaskSubscription!: Subscription;
   private searchingSubscription!: Subscription;
+  private taskDeletedSubscription!: Subscription;
   tasks: GetTask[] = [];
   filteredTasks: GetTask[] = [];
   toDo: GetTask[] = [];
@@ -30,22 +31,29 @@ export class BoardComponent implements OnInit, OnDestroy {
   searchControl = new FormControl('');
 
 
-  constructor(private taskService: TaskService, private notificationService: NotificationService) {
+  constructor(private taskService: TaskService, private notificationService: NotificationService, private taskEventService: TaskEventService) {
 
   }
 
   ngOnInit(): void {
-    this.getTaskSubscription = this.subGetTasks();
+    this.subGetTasks();
     this.searchingSubscription = this.subSearching();
+    this.taskDeletedSubscription = this.subTaskDeleted();
   }
 
   ngOnDestroy(): void {
-    if (this.getTaskSubscription) {
-      this.getTaskSubscription.unsubscribe();
-    }
     if (this.searchingSubscription) {
       this.searchingSubscription.unsubscribe();
     }
+    if (this.taskDeletedSubscription) {
+      this.taskDeletedSubscription.unsubscribe();
+    }
+  }
+
+  subTaskDeleted() {
+    return this.taskEventService.taskDeleted$.subscribe(taskId => {
+      this.onTaskDeleted(taskId);
+    });
   }
 
   subSearching(): Subscription {
@@ -70,12 +78,18 @@ export class BoardComponent implements OnInit, OnDestroy {
     return of(filtered);
   }
 
-  subGetTasks(): Subscription {
-    return this.taskService.getTaskWithCategoryAndUsers().pipe(map((tasks: GetTask[]) => {
+  subGetTasks() {
+    this.taskService.getTaskWithCategoryAndUsers().pipe(take(1)).subscribe((tasks: GetTask[]) => {
       this.tasks = tasks;
       this.filteredTasks = tasks;
       this.updateTaskLists();
-    })).subscribe(() => { });
+    });
+  }
+
+  onTaskDeleted(taskId: number) {
+    this.tasks = this.tasks.filter(task => task.id !== taskId); // delete Task from the list
+    this.updateTaskLists();
+    this.subGetTasks();
   }
 
   updateTaskLists(): void {
@@ -100,7 +114,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       const container = event.container;
       const updatedTask = previousContainer.data[previousIndex];
       const newStatus = this.getStatusFromContainerId(container.id);
-      
+
       transferArrayItem(previousContainer.data, container.data, previousIndex, currentIndex);
       this.markTaskAsLoading(updatedTask.id); // mark the task - is loading
       this.updateStatusBackend(updatedTask.id, newStatus, previousContainer, container.data, previousIndex, currentIndex, updatedTask);
@@ -117,7 +131,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       error: err => {
         transferArrayItem(containerData, previousContainer.data, currentIndex, previousIndex);
         console.error('Error updating task status:', err);
-        this.notificationService.showMessage('Something went wrong!', true);
+        this.notificationService.showMessage('Error updating task status!', true);
         this.unmarkTaskAsLoading(updatedTask.id);  //remark the task into - isn't loading
       },
       complete: () => {

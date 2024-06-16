@@ -19,12 +19,14 @@ h1 {
 }
 
 .status-columns {
+  scrollbar-width: none;
+  overflow-y: scroll;
+  height: calc(100vh - 300px);
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   padding-right: 25px;
   padding-left: 25px;
-
 }
 
 .board {

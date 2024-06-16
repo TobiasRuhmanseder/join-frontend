@@ -78,9 +78,8 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   subAllUsers(): Subscription {
     return this.userService.getAllUsers().subscribe({
       next: response => {
-        this.allUsers = response;
-      }
-      ,
+        this.allUsers = response.filter(user => user.username.toLowerCase() !== 'admin');
+      },
       error: error => console.log(error)
     })
   }
@@ -113,7 +112,6 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   subCreateCategory(newTask: Task) {
     return this.taskService.createTask(newTask).subscribe({
       next: response => {
-        console.log('Task created:', response);
         this.resetForm();
         this.notificationService.showMessage('Task was created successfully!');
         this.router.navigateByUrl('/main/board');
@@ -178,7 +176,6 @@ export class AddTaskComponent implements OnInit, OnDestroy {
 
   saveCategories() {
     const categoriesJson = JSON.stringify(this.categories);
-    console.log('Kategorien gespeichert:', categoriesJson);
     localStorage.setItem('categories', categoriesJson);
   }
 
@@ -215,12 +212,10 @@ export class AddTaskComponent implements OnInit, OnDestroy {
         due_date: this.dueDate,
         priority: this.priority,
         category: this.selectedCategory,
-        board: 1,
+        board: 1, // If you later expand to multiple boards, change
         subtasks: this.subtasks,
         status: 'todo'
       };
-      console.log(JSON.stringify(newTask));
-
       this.createTaskSubscription = this.subCreateCategory(newTask);
     }
   }
@@ -236,8 +231,6 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   }
 
   addSubtask() {
-    console.log('test');
-
     if (this.newSubtaskTitle.trim() !== '') {
       const newSubtask: Subtask = {
         id: this.subtasks.length + 1, // Temporäre ID, wird durch Backend ersetzt
@@ -246,8 +239,6 @@ export class AddTaskComponent implements OnInit, OnDestroy {
       };
       this.subtasks.push(newSubtask);
       this.newSubtaskTitle = '';
-      console.log(this.subtasks);
-
     }
   }
 

@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 
 export const authInterceptor: HttpInterceptorFn = (request, next) => {
-  console.log('interceptor works');
   const router: Router = inject(Router);
   const token = localStorage.getItem('token');
 

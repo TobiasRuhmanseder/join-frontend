@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { TaskService } from '../../../../services/task.service';
 import { NotificationService } from '../../../../services/notification.service';
 import { Router } from '@angular/router';
+import { TaskEventService } from '../../../../services/task-event.service';
 
 @Component({
   selector: 'app-task-dialog',
@@ -24,9 +25,11 @@ import { Router } from '@angular/router';
 })
 export class TaskDialogComponent implements OnInit {
   @Input() task!: GetTask;
+  private isClosed: boolean = false;
+  closeDialog: (() => void) | undefined;
   public slideInOut = 'out';
 
-  constructor(private router: Router, private taskService: TaskService, private notificationService: NotificationService) { }
+  constructor(private router: Router, private taskService: TaskService, private notificationService: NotificationService, private taskEventService: TaskEventService) { }
 
   ngOnInit() {
     timer(10).pipe(
@@ -36,27 +39,32 @@ export class TaskDialogComponent implements OnInit {
     });
   }
 
-  closeDialog: (() => void) | undefined;
-
   close() {
+    if (this.isClosed) {
+      return;
+    }
+    this.isClosed = true;
     this.slideInOut = 'out';
     timer(300).pipe(
       take(1)
     ).subscribe(() => {
       if (this.closeDialog) {
         this.closeDialog();
+        this.taskEventService.notifyTaskDeleted(this.task.id);
+      } else {
       }
     });
   }
 
   deleteTask() {
     this.taskService.deleteTask(this.task.id).pipe(take(1)).subscribe({
-      next: deletetTask => {
+      complete: () => {
         this.notificationService.showMessage('delete successfully!', true);
         this.close();
+
       },
       error: err => {
-        this.notificationService.showMessage('Something went wrong!', true);
+        this.notificationService.showMessage('Failed to delete task!', true);
       }
     });
   }

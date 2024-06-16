@@ -38,7 +38,6 @@ export class AuthService {
     const token = this.getToken();
     if (token) {
       this.currentUserService.fetchCurrentUser();
-      console.log('fetch');
     }
   }
 

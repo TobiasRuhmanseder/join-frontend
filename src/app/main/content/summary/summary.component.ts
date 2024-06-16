@@ -24,12 +24,29 @@ export class SummaryComponent implements OnInit {
   urgentCount: number = 0;
   tasksCount: number = 0;
   nextUrgentTaskDueDate: string = '';
+  greeting: string = '';
   constructor(private router: Router, private currentUserService: CurrentUserService, private taskService: TaskService) { }
 
 
   ngOnInit(): void {
     this.subCurrentUser();
     this.subTasks();
+    this.greeting = this.getRightGreeting();
+  }
+
+  getRightGreeting() {
+    const now = new Date();
+    const hour = now.getHours();
+
+    if (hour < 12) {
+      return "Good morning";
+    } else if (hour < 18) {
+      return "Good afternoon";
+    } else if (hour < 22) {
+      return "Good evening";
+    } else {
+      return "Hello";
+    }
   }
 
   subCurrentUser() {

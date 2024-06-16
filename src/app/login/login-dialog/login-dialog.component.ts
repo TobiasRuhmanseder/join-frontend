@@ -29,7 +29,6 @@ export class LoginDialogComponent implements OnDestroy {
   private timerSubscription: Subscription | null = null;
 
   constructor(private authService: AuthService, private router: Router, private notificationService: NotificationService) {
-
   }
 
   ngOnDestroy(): void {

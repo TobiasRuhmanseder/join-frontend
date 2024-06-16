@@ -6,6 +6,7 @@ import { AuthService } from './services/auth.service';
 import { GuestUserService } from './services/guest-user.service';
 import { take } from 'rxjs';
 import { User } from './interface/user';
+import { BoardService } from './services/board.service';
 
 
 @Component({
@@ -19,29 +20,33 @@ import { User } from './interface/user';
 export class AppComponent implements OnInit {
   title = 'join';
 
-  constructor(private authService: AuthService, private guestUserService: GuestUserService) {
+  constructor(private authService: AuthService, private guestUserService: GuestUserService, private boardService: BoardService) {
   }
 
   ngOnInit(): void {
     this.authService.initializeCurrentUser();
     this.checkGuestUser();
+    this.checkBoardExists();
   }
 
-
-  checkGuestUser(): void {
+  checkGuestUser() {
     this.guestUserService.checkAndCreateGuestUser().pipe(
       take(1)
     ).subscribe({
-      next: (response) => {
-        if (response.error) {
-          console.error(response.error);
-        } else {
-          console.log('Guest user checked/created:', response);
-        }
-      },
       error: error => {
         console.error('Error:', error);
-      }}
+      }
+    }
     );
+  }
+
+  checkBoardExists() {
+    this.boardService.checkAndCreateBoard(1, 'Default Board', 'This is the default Board')
+      .pipe(take(1)).subscribe({
+        error: err => {
+          console.error('Error checking or creating board:', err);
+        }
+      });
+
   }
 }

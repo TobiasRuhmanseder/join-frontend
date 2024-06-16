@@ -54,9 +54,6 @@ export class TaskService {
       this.http.get<User[]>(urlUsers)
     ]).pipe(
       map(([tasks, categories, users]: [Task[], Category[], User[]]) => {
-        console.log('Tasks:', tasks);
-        console.log('Categories:', categories);
-        console.log('Users:', users);
         return tasks.map(task => ({
           ...task,
           category: categories.find(category => category.id === task.category) as Category,

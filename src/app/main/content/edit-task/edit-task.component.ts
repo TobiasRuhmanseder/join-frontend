@@ -131,7 +131,6 @@ export class EditTaskComponent implements OnInit, OnDestroy {
   subUpdateTask(updatedTask: Task) {
     return this.taskService.updateTask(updatedTask).subscribe({
       next: response => {
-        console.log('Task updated:', response);
         this.notificationService.showMessage('Task was updated successfully!');
         timer(1000).subscribe(() =>
           this.router.navigateByUrl('/main/board')
@@ -193,7 +192,6 @@ export class EditTaskComponent implements OnInit, OnDestroy {
 
   saveCategories() {
     const categoriesJson = JSON.stringify(this.categories);
-    console.log('Kategorien gespeichert:', categoriesJson);
     localStorage.setItem('categories', categoriesJson);
   }
 
@@ -235,8 +233,6 @@ export class EditTaskComponent implements OnInit, OnDestroy {
         status: this.status
       };
       this.updateUserSelection();
-      console.log(JSON.stringify(updatedTask));
-
       this.createTaskSubscription = this.subUpdateTask(updatedTask);
     }
   }
@@ -341,7 +337,6 @@ export class EditTaskComponent implements OnInit, OnDestroy {
   }
 
   somethingWentWrongError(error: any) {
-    console.log(error);
     this.notificationService.showMessage('Something went wrong!');
     this.router.navigateByUrl('main/board/')
   }
