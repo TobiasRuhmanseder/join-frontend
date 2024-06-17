@@ -80,6 +80,7 @@ export class LoginDialogComponent implements OnDestroy {
   }
 
   loginWithUsernameAndPassword() {
+    localStorage.removeItem('token');
     if (this.checkInputs()) {
 
       this.loginSubscription = this.authService.login(this.usernameValue, this.passwordValue).subscribe({

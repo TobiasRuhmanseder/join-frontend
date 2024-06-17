@@ -15,7 +15,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'privacy_policy', component: PrivacyPolicySignupComponent },
   { path: 'main', redirectTo: '/main/summary', pathMatch: 'full' },
-  { path: '', redirectTo: '/main/summary', pathMatch: 'full' },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   {
     path: 'main', component: MainComponent, resolve: { CurrentUserResolver }, children: [
       { path: 'summary', component: SummaryComponent },
@@ -27,5 +27,5 @@ export const routes: Routes = [
       { path: 'edit_task/:id', component: EditTaskComponent },
     ]
   },
-
+  { path: '**', redirectTo: '/login' }
 ];
