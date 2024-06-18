@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { AuthService } from '../services/auth.service';
-import { Router } from '@angular/router';
 import { SidemenuComponent } from './sidemenu/sidemenu.component';
 import { HeaderMenuComponent } from './header-menu/header-menu.component';
 
@@ -17,14 +15,8 @@ import { HeaderMenuComponent } from './header-menu/header-menu.component';
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
 })
-export class MainComponent implements OnInit {
+export class MainComponent {
 
-  constructor(private router: Router, private authService: AuthService) {
+  constructor() { }
 
-  }
-
-  ngOnInit(): void {
-    if (!this.authService.isAuthenticated()) this.router.navigateByUrl('/login');
-
-  }
 }

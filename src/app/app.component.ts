@@ -24,7 +24,6 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authService.initializeCurrentUser();
     this.checkGuestUser();
     this.checkBoardExists();
   }

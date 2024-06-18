@@ -34,7 +34,4 @@ export class CurrentUserService {
   clearCurrentUser() {
     this.currentUserSubject.next(null);
   }
-
-
-
 }

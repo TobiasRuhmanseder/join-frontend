@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-import { Observable, map, tap } from 'rxjs';
+import { Observable, catchError, map, of, tap } from 'rxjs';
 import { AuthResponse } from '../interface/auth-response';
 import { Router } from '@angular/router';
 import { CurrentUserService } from './current-user.service';
+import { TokenResponse } from '../interface/token-response';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,6 @@ export class AuthService {
       "username": username,
       "password": password
     }
-
     return this.http.post<AuthResponse>(url, body).pipe(
       tap(response => {
         localStorage.setItem('token', response.token);
@@ -34,17 +34,26 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
-  initializeCurrentUser(): void {
+  isAuthenticated(): Observable<boolean> {
     const token = this.getToken();
-    if (token) {
-      this.currentUserService.fetchCurrentUser();
-    }
+    if (token) return this.validateToken(token)
+    else return of(false)
   }
 
+  validateToken(token: string) {
+    const url = environment.baseUrl + "/api/check_token/";
+    const body = { token };
 
-  isAuthenticated(): boolean {
-    return !!this.getToken();
+    return this.http.post<TokenResponse>(url, body).pipe(
+      map(response => {
+        if (response.message === 'Token exists') return true
+        else return false
+      })
+      ,
+      catchError(() => of(false))
+    );
   }
+
 
   logout(): void {
     localStorage.removeItem('token');

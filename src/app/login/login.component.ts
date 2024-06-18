@@ -32,7 +32,9 @@ export class LoginComponent implements OnInit {
 
 
   ngOnInit(): void {
-    if (this.authService.isAuthenticated()) this.router.navigateByUrl('/main')
+    this.authService.isAuthenticated().subscribe(isAuth => {
+      if (isAuth) this.router.navigateByUrl('/main')
+    })
   }
 
   onAnimationEnd() {

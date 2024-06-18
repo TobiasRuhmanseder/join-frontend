@@ -82,7 +82,6 @@ export class LoginDialogComponent implements OnDestroy {
   loginWithUsernameAndPassword() {
     localStorage.removeItem('token');
     if (this.checkInputs()) {
-
       this.loginSubscription = this.authService.login(this.usernameValue, this.passwordValue).subscribe({
         next: response => {
           this.deleteInputs();
@@ -90,7 +89,6 @@ export class LoginDialogComponent implements OnDestroy {
           this.timerSubscription = timer(1500).subscribe(() => {
             this.router.navigate(['/main']);
           })
-
         },
         error: error => {
           if (error.status === 401) {
