@@ -96,7 +96,9 @@
       <label class="privacy-policy">
         <input type="checkbox" [(ngModel)]="acceptPrivacyPolicy" name="privacyPolicy"
           (change)="onInputChange('privacyPolicy')">
-        I accept the &nbsp; <a (click)="navigateToPrivacyPolicy()">Privacy policy</a>
+        I accept the &nbsp; <a href="/privacy_policy" target="_blank" rel="noopener noreferrer">
+          Privacy Policy
+        </a>
       </label>
       <div class="required-container">
         @if (touchedPrivacyPolicy && !isFieldValid('privacyPolicy')) {
