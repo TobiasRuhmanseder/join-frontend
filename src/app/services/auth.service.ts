@@ -21,7 +21,7 @@ export class AuthService {
       "username": username,
       "password": password
     }
-    return this.http.post<AuthResponse>(url, body).pipe(
+    return this.http.post<AuthResponse>(url, body, { withCredentials: true }).pipe(
       tap(response => {
         localStorage.setItem('token', response.token);
         this.currentUserService.fetchCurrentUser();
@@ -44,7 +44,7 @@ export class AuthService {
     const url = environment.baseUrl + "/api/check_token/";
     const body = { token };
 
-    return this.http.post<TokenResponse>(url, body).pipe(
+    return this.http.post<TokenResponse>(url, body, { withCredentials: true }).pipe(
       map(response => {
         if (response.message === 'Token exists') return true
         else return false

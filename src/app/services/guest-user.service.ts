@@ -1,10 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subscription, catchError, map, of, switchMap } from 'rxjs';
-import { environment } from '../../environments/environment.development';
-import { CreateUser, User } from '../interface/user';
+import { Observable, catchError, of, switchMap } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { CreateUser, } from '../interface/user';
 import { UserService } from './user.service';
-import { enableDebugTools } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +14,7 @@ export class GuestUserService {
 
   checkAndCreateGuestUser(): Observable<any> {
     const url = `${environment.baseUrl}/api/guest_exists/`;
-    return this.http.get<any>(url).pipe(
+    return this.http.get<any>(url, { withCredentials: true }).pipe(
       switchMap(response => {
         if (!response.exists) {
           return this.createGuestUser(this.guestUser());
@@ -33,7 +32,7 @@ export class GuestUserService {
   private guestUser(): CreateUser {
     return {
       username: 'guest',
-      password: 'guest', 
+      password: 'guest',
       email: 'guest@guest.com',
       first_name: 'Guest',
       last_name: 'User'
@@ -47,5 +46,5 @@ export class GuestUserService {
         return of({ error: 'Error creating guest user' });
       })
     );
-}
+  }
 }

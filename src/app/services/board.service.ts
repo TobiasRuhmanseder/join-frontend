@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +17,6 @@ export class BoardService {
       title: title,
       description: description
     };
-    return this.http.post(url, body);
+    return this.http.post(url, body, {withCredentials: true});
   }
 }

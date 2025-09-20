@@ -18,7 +18,7 @@ export class CurrentUserService {
 
   getCurrentUser(): Observable<User> {
     const url = environment.baseUrl + "/api/current_user/";
-    return this.http.get<User>(url).pipe(tap((currentUser: User) => this.currentUserSubject.next(currentUser)))
+    return this.http.get<User>(url, { withCredentials: true }).pipe(tap((currentUser: User) => this.currentUserSubject.next(currentUser)))
   }
 
   fetchCurrentUser() {

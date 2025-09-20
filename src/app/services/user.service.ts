@@ -24,12 +24,12 @@ export class UserService {
 
   getAllUsers(): Observable<User[]> {
     const url = environment.baseUrl + "/api/users/";
-    return this.http.get<User[]>(url)
+    return this.http.get<User[]>(url, { withCredentials: true })
   }
 
   getCurrentUser(): Observable<User[]> {
     const url = environment.baseUrl + "/api/current_user/";
-    return this.http.get<User[]>(url)
+    return this.http.get<User[]>(url, { withCredentials: true })
   }
 
 
