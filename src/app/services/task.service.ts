@@ -1,6 +1,6 @@
 import { Category } from './../interface/category';
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin, map } from 'rxjs';
 import { GetTask, Subtask, Task } from '../interface/task';
