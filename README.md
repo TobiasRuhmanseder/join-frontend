@@ -2,6 +2,7 @@
 The **Join Frontend** is the client-side application for the **Join Project** – a task manager inspired by the Kanban system.  
 It is built with **Angular** they  was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.7.
 
+Test it live [here](https://tobias-ruhmanseder.de)
 
 ## Development server
 
