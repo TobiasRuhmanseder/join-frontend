@@ -2,6 +2,10 @@
   display: flex;
 }
 
+.mobile-menu {
+  display: none;
+}
+
 .sidemenu {
   display: block;
   width: 230px;
@@ -19,3 +23,30 @@
   height: calc(100vh - 96px); // - headermenu
   width: calc(100vw - 230px); // - Sidemenu
 }
+
+@media (max-width: 1025px) {
+
+  .sidemenu {
+    display: none;
+  }
+
+  .mobile-menu {
+    display: block;
+  }
+
+  .header-menu {
+    display: block;
+    width: 100dvw;
+    height: 76px;
+  }
+
+  .content-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 96px); // - headermenu
+    width: 100vw; // - Sidemenu
+  }
+}
+
+@media (max-width: 450px) {}

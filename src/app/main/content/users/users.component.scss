@@ -128,3 +128,70 @@ li:hover {
     font-size: 24px;
     margin-right: 10px;
 }
+
+@media (max-width: 1200px) {
+
+    h1 {
+        font-size: 32px;
+    }
+
+    .details-headline {
+        span {
+            font-size: 16px;
+        }
+    }
+
+    .name-details {
+        span {
+            font-size: 20px;
+        }
+    }
+
+    .user-border-big {
+        width: 30px;
+        height: 30px;
+        font-size: 12px;
+    }
+
+    .user-container {
+        width: 100dvw;
+    }
+
+    .user-list {
+        width: 170px;
+        overflow: scroll;
+        padding: 5px;
+        padding-bottom: 130px;
+        font-size: 12px;
+    }
+
+    .user-details {
+        padding-left: 10px;
+    }
+
+    .user-border {
+        display: none;
+    }
+
+    .border-line {
+        margin: 5px;
+    }
+}
+
+@media (max-width: 500px) {
+
+    h1 {
+        font-size: 32px;
+    }
+
+    .details-headline {
+        span {
+            display: none;
+            font-size: 16px;
+        }
+    }
+
+    .border-line {
+        display: none;
+    }
+}

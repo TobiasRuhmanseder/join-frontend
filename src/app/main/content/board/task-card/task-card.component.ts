@@ -15,7 +15,8 @@ export class TaskCardComponent {
   @Input() task!: GetTask;
   @Input() loading: boolean = false;
 
-  constructor(private dialogService: DialogService, private viewContainerRef: ViewContainerRef) { }
+  constructor(private dialogService: DialogService, private viewContainerRef: ViewContainerRef) {
+   }
 
   openDialog() {
     this.dialogService.openDialog(this.viewContainerRef, this.task);

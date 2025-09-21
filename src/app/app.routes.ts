@@ -17,7 +17,7 @@ export const routes: Routes = [
   { path: 'main', redirectTo: '/main/summary', pathMatch: 'full' },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   {
-    path: 'main', component: MainComponent, resolve: { CurrentUserResolver }, children: [
+    path: 'main', component: MainComponent, resolve: { CurrentUserResolver }, children: [  
       { path: 'summary', component: SummaryComponent },
       { path: 'addtask', component: AddTaskComponent },
       { path: 'board', component: BoardComponent },

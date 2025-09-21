@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SidemenuComponent } from './sidemenu/sidemenu.component';
 import { HeaderMenuComponent } from './header-menu/header-menu.component';
+import { MobileMenuComponent } from "./mobile-menu/mobile-menu.component";
 
 
 
@@ -11,7 +12,7 @@ import { HeaderMenuComponent } from './header-menu/header-menu.component';
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [SidemenuComponent, HeaderMenuComponent, RouterOutlet],
+  imports: [SidemenuComponent, HeaderMenuComponent, RouterOutlet, MobileMenuComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
 })

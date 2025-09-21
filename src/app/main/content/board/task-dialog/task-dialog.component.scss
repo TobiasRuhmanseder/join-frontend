@@ -167,3 +167,12 @@
         opacity: 1;
     }
 }
+
+@media (max-width: 650px) {
+
+    .dialog-content {
+        width: 100dvw;
+        height: 100dvh;
+        border-radius: 0px;
+    }
+}

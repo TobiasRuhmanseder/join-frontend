@@ -217,3 +217,83 @@ h1 {
 .checkbox-container label {
     color: black;
 }
+
+@media (max-width: 1450px) {
+
+    .left-column {
+        width: 30dvw;
+    }
+
+    .right-column {
+        width: 30dvw;
+    }
+
+    .header {
+        width: 60dvw;
+    }
+
+}
+
+@media (max-width: 1025px) {
+
+    .add-task-dialog {
+        width: 100%;
+        padding-bottom: 100px;
+        padding: 0px;
+        overflow: hidden;
+
+    }
+
+    .task-form {
+        width: calc(100dvw - 40px - 10px);
+        flex-direction: column;
+        align-items: center;
+        padding: 0px 20px;
+    }
+
+    .left-column {
+        width: 100%;
+    }
+
+    .right-column {
+        width: 100%;
+    }
+
+    .vertical-divider {
+        display: none;
+    }
+
+    .add-task-dialog {
+        display: inline-block;
+        overflow-y: scroll;
+
+        height: calc(100dvh - 350px);
+    }
+
+    .header {
+        width: 100dvw;
+        position: absolute;
+        top: 100px;
+        left: 30px;
+        margin: 0;
+
+    }
+
+    h1 {
+        font-size: 32px;
+    }
+
+    .update_bttn {
+        position: absolute;
+        top: 20px;
+        right: 50px;
+    }
+}
+
+
+@media (max-width: 500px) {
+    .btn-prio {
+        width: 110px;
+        font-size: 16px;
+    }
+}

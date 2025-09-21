@@ -32,7 +32,6 @@ export class BoardComponent implements OnInit, OnDestroy {
 
 
   constructor(private taskService: TaskService, private notificationService: NotificationService, private taskEventService: TaskEventService) {
-
   }
 
   ngOnInit(): void {

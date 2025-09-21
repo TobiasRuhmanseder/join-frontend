@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserService } from '../../../services/user.service';
 import { TaskService } from '../../../services/task.service';
 import { CurrentUserService } from '../../../services/current-user.service';
 import { take } from 'rxjs';

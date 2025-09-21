@@ -1,7 +1,7 @@
 <div class="add-task-dialog">
     <div class="header">
         <h1>Edit Task</h1>
-        <button class="btn-blue" type="button" [disabled]="!isFormValid()" [ngClass]="{'btn-disabled': !isFormValid()}"
+        <button class="btn-blue update_bttn" type="button" [disabled]="!isFormValid()" [ngClass]="{'btn-disabled': !isFormValid()}"
             (click)="updateTask()">
             <span class="create-task-text">Update Task</span>
             <img src="../../../../assets/img/check.svg" alt="">
